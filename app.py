@@ -21,8 +21,6 @@ def scrape_mars_data():
 def render_index():
  
     mars_find =  mars_pull.find_one()
-
- 
     newsTitle = mars_find['news_data']['newsTitle']
     newsHeader = mars_find['news_data']['newsHeader']
     newsIntro = mars_find['news_data']['newsIntro']

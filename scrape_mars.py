@@ -34,7 +34,7 @@ def scrape():
 
 #------------------------------------------------
 
-#
+# Define mars news function to return news dictionary to mongoDB
 def marsNews():
     # Open splinter browser 
     browser = openBrowser()
@@ -86,13 +86,13 @@ def marsNews():
 
 #------------------------------------------------
 
+# Define function to return the NASA mars site's most recent mars image
 def marsFeaturedImage():
     # Open Browser
     browser = openBrowser()
 
     # Navigate to nasa mars page to scrape most recent image
     featured_image_array = []
-
     mars_pic_url = "https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars"
     mars_hd = "https://www.jpl.nasa.gov/spaceimages/"
     browser.visit(mars_pic_url)
@@ -101,6 +101,8 @@ def marsFeaturedImage():
     time.sleep(1)
     mars_pic_soup = bs(mars_pic_html, 'html.parser')
     time.sleep(1)
+
+    # Filter HTML for image tag
     mars_images = mars_pic_soup.find_all('div',class_="img")                                                   
 
     # Append mars images into empty list
@@ -121,7 +123,7 @@ def marsFeaturedImage():
 
 #------------------------------------------------
 
-
+# Define function to return most recent mars weather post from twitter
 def marsWeather():
 
     # Open splinter browser
@@ -160,6 +162,7 @@ def marsWeather():
 
 #------------------------------------------------
 
+# Define function to return mars fact table as html
 def marsFacts():
 
     # Scrape mars fact table in pandas
@@ -178,6 +181,7 @@ def marsFacts():
 
 #------------------------------------------------
 
+# Define function to return mars hemisphere images and titles to mongoDB
 def marsHemispheres():
 
     browser = openBrowser()
@@ -203,11 +207,14 @@ def marsHemispheres():
         title = hemi.a.text
         title = title.replace('Enhanced', '')
         browser.click_link_by_partial_text(title)
-    
         asc_html = browser.html 
-        time.sleep(1)                                               
-        asc_soup = bs(asc_html, 'html.parser')                                 
+
+        time.sleep(1)   
+
+        asc_soup = bs(asc_html, 'html.parser')  
+                                       
         time.sleep(1)
+
         image = asc_soup.find('div', class_='downloads').find('ul').find('li')  
         image_url = image.a['href']
     

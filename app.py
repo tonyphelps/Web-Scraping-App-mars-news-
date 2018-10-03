@@ -2,21 +2,25 @@ from flask import Flask, jsonify, redirect, render_template
 import pymongo
 import scrape_mars
 
+# Establish MongoDG server connection on local machine
 conn = 'mongodb://localhost:27017/'
 client = pymongo.MongoClient(conn)
 
+# Initialize Flash
 app = Flask(__name__)
 
+# Create Mars DB collection in mongoDB
 db = client.mars_db
 mars_pull = db.mars_db
 
+# Create scrape route to pull database objects/html into index
 @app.route('/scrape')
 def scrape_mars_data():
     scrape_results = scrape_mars.scrape()
     mars_pull.replace_one({}, scrape_results, upsert=True)
     return redirect('http://localhost:5000/')
 
-
+# Create route to assign variables from scrape_mars.py into index.html render template
 @app.route("/")
 def render_index():
  

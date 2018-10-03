@@ -10,7 +10,7 @@ import time
 def openBrowser():
     executable_path = {'executable_path': '../chromedriver'}
     return Browser('chrome', **executable_path, headless=False)
-    time.sleep(3)
+    time.sleep(1)
 
 #------------------------------------------------
 
@@ -42,16 +42,22 @@ def scrape():
 
 def marsNews():
 
+    browser = openBrowser()
+    time.sleep(2)
+
     nasa_news_url = "https://mars.nasa.gov/news/"
     nasa_site = "https://mars.nasa.gov" 
     
     p_text = []
     news = {}
 
-    response = requests.get(nasa_news_url)
-    time.sleep(5)
-    soup = bs(response.text, 'html.parser')
-
+    # Navigate splinter/chrome browser to news url and zap the html into BS!
+    browser.visit(nasa_news_url)
+    time.sleep(1)
+    news1_html = browser.html
+    time.sleep(1)
+    soup = bs(news1_html, 'html.parser')
+    
     article1 = soup.find(class_="slide")
     article = article1.find_all('a')
     news_p = article[0].get_text().strip()
@@ -62,7 +68,7 @@ def marsNews():
     url_link = nasa_site + url_p
 
     response2 = requests.get(url_link) 
-    time.sleep(5)                                         
+    time.sleep(1)                                         
     paragraph_soup = bs(response2.text, "html.parser")                         
     html_paragraphs = paragraph_soup.find(class_='wysiwyg_content')           
     paragraphs = html_paragraphs.find_all('p')
@@ -73,6 +79,8 @@ def marsNews():
     news["newsTitle"] = news_title
     news['newsHeader'] = p_header
     news['newsIntro'] = p_intro
+
+    closeBrowser(browser)
 
     return news
 
@@ -118,11 +126,11 @@ def marsWeather():
 
     mars_weather = "https://twitter.com/marswxreport?lang=en"
     browser.visit(mars_weather)
-    time.sleep(3)
+    time.sleep(1)
     weather_html = browser.html
-    time.sleep(3)
+    time.sleep(1)
     weather_soup = bs(weather_html, 'html.parser')
-    time.sleep(3)
+    time.sleep(1)
     mars_posts = weather_soup.find_all('p',class_="TweetTextSize TweetTextSize--normal js-tweet-text tweet-text")
 
     for posts in mars_posts:
@@ -144,7 +152,7 @@ def marsFacts():
 
     data_url = "https://space-facts.com/mars/"
     table = pd.read_html(data_url)
-    time.sleep(5)
+    time.sleep(1)
     clean_table = table[0]
     clean_table.columns = ['Data', 'Values']
     mars_table_html = clean_table.to_html(header=False, index=False)
@@ -162,11 +170,11 @@ def marsHemispheres():
 
     hemi_url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
     browser.visit(hemi_url)
-    time.sleep(3)
+    time.sleep(1)
     hemi_html = browser.html
-    time.sleep(3)
+    time.sleep(1)
     hemi_soup = bs(hemi_html, 'html.parser')
-    time.sleep(3)
+    time.sleep(1)
     soup_results = hemi_soup.find('div', class_='result-list')                     
     hemispheres = soup_results.find_all('div', class_='item')                       
 

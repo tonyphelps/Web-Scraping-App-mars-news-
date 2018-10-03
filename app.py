@@ -14,7 +14,7 @@ mars_pull = db.mars_db
 def scrape_mars_data():
     scrape_results = scrape_mars.scrape()
     mars_pull.replace_one({}, scrape_results, upsert=True)
-    return redirect('http://localhost:5000/', code=302)
+    return redirect('http://localhost:5000/')
 
 
 @app.route("/")

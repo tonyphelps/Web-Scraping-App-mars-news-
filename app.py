@@ -13,7 +13,7 @@ app = Flask(__name__)
 db = client.mars_db
 mars_pull = db.mars_db
 
-# Create scrape route to pull database objects/html into index
+# Create scrape route to upsert into database and pull objects/html into index
 @app.route('/scrape')
 def scrape_mars_data():
     scrape_results = scrape_mars.scrape()
